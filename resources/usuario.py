@@ -1,9 +1,8 @@
 from flask_restful import Resource, reqparse
-from model.usuario import UserModel
-from flask_jwt_extended import create_access_token, jwt_required
+from models.usuario import UserModel
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt
 from blocklist import BLOCKLIST
 from passlib.hash import bcrypt
-import flask_jwt_extended
 
 
 atributos = reqparse.RequestParser()
@@ -63,6 +62,6 @@ class UserLogout(Resource):
 
     @jwt_required()
     def post(self):
-        jwt_id = flask_jwt_extended.get_jwt()['jti'] #jwt Token Identifier
+        jwt_id = get_jwt()['jti'] #jwt Token Identifier
         BLOCKLIST.add(jwt_id)
         return {'message' : 'Logged out successfully!'}, 200
